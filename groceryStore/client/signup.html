@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign up</title>
+  </head>
+  <body>
+    <h1>הרשמה</h1>
+    <div>
+      <input type="text" id="CompanyName" placeholder="חברה" required />
+    </div>
+    <div>
+      <input type="text" id="phone" placeholder="טלפון" required />
+    </div>
+    <div>
+      <input type="text" id="agent" placeholder="שם נציג" required />
+    </div>
+    <div>
+      <input type="text" id="supplierGoods" placeholder="רשימת סחורות" required />
+    </div>
+    <div>
+      <input type="password" id="signupPassword" placeholder="סיסמה" required />
+    </div>
+    <div>
+      <button id="signupBtn">הרשמה</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document.getElementById("signupBtn").addEventListener("click", function() {
+        let company = document.getElementById("CompanyName").value.trim();
+        let phone = document.getElementById("phone").value.trim();
+        let agent = document.getElementById("agent").value.trim();
+        let supplierGoods = document.getElementById("supplierGoods").value.trim();
+        let password = document.getElementById("signupPassword").value.trim();
+
+        if (!company || !phone || !agent || !supplierGoods || !password) {
+          Swal.fire({
+            text: "מלא את כל השדות"
+          });
+          return;
+        }
+
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+        if (users.some(user => user.company === company)) {
+          Swal.fire({
+            text: "החברה כבר קיימת במערכת"
+          });
+          return;
+        }
+
+        let user = {
+          company: company,
+          phone: phone,
+          agent: agent,
+          supplierGoods: supplierGoods,
+          password: password
+        };
+
+        users.push(user);
+        localStorage.setItem("users", JSON.stringify(users));
+
+        Swal.fire({
+          text: "ההרשמה בוצעה בהצלחה!"
+        }).then(() => {
+          window.location.href = "login.html";
+        });
+      });
+    </script>
+  </body>
+</html>
